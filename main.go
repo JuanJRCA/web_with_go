@@ -3,26 +3,26 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"text/template"
 
 	"github.com/gorilla/mux"
+	"github.com/web_go/views"
 )
 
 var (
-	homeTemplate   *template.Template
-	contacTemplate *template.Template
+	homeView    *views.View
+	contactView *views.View
 )
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "text/html")
-	error := homeTemplate.Execute(w, nil)
+	error := homeView.Template.Execute(w, nil)
 	if error != nil {
 		panic(error)
 	}
 }
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "text/html")
-	error := contacTemplate.Execute(w, nil)
+	error := contactView.Template.Execute(w, nil)
 	if error != nil {
 		panic(error)
 	}
@@ -40,17 +40,9 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	var error error
-	homeTemplate, error = template.ParseFiles("views/home.gohtml",
-		"views/layout/footer.gohtml")
-	if error != nil {
-		panic(error)
-	}
-	contacTemplate, error = template.ParseFiles("views/contact.gohtml",
-		"views/layout/footer.gohtml")
-	if error != nil {
-		panic(error)
-	}
+
+	homeView = views.NewView("views/home.gohtml")
+	contactView = views.NewView("views/contact.gohtml")
 
 	r := mux.NewRouter()
 	r.NotFoundHandler = http.HandlerFunc(notFound)
