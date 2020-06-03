@@ -10,7 +10,9 @@ type View struct {
 }
 
 func NewView(layout string, files ...string) *View {
-	files = append(files, "views/layout/bootstrap.gohtml", "views/layout/footer.gohtml")
+	files = append(files, "views/layout/bootstrap.gohtml",
+		"views/layout/navbar.gohtml",
+		"views/layout/footer.gohtml")
 	t, error := template.ParseFiles(files...)
 
 	if error != nil {
