@@ -6,16 +6,20 @@ import (
 
 type View struct {
 	Template *template.Template
+	Layout   string
 }
 
-func NewView(files ...string) *View {
-	files = append(files, "views/layout/footer.gohtml")
+func NewView(layout string, files ...string) *View {
+	files = append(files, "views/layout/bootstrap.gohtml", "views/layout/footer.gohtml")
 	t, error := template.ParseFiles(files...)
 
 	if error != nil {
 		panic(error)
 	}
 
-	return &View{Template: t}
+	return &View{
+		Template: t,
+		Layout:   layout,
+	}
 
 }
