@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/schema"
 	"github.com/web_go/views"
 )
 
@@ -25,12 +26,24 @@ func (u *User) New(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type SignUpForm struct {
+	Email    string `schema:"email"`
+	Password string `schema:"password"`
+}
+
 func (u *User) Create(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		panic(err)
 	}
-	fmt.Fprint(w, r.PostForm["email"])
-	fmt.Fprint(w, r.PostForm["password"])
-	fmt.Fprint(w, "Está haciendo un POST")
+	var form SignUpForm
+	dec := schema.NewDecoder()
+	err = dec.Decode(&form, r.PostForm)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Fprint(w, form)
+
 }
