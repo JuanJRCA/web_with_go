@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	LayoutDir string = "views/layout/"
-	LayoutExt string = ".gohtml"
+	LayoutDir    string = "views/layout/"
+	LayoutExt    string = ".gohtml"
+	InitTemplate string = "views/"
 )
 
 type View struct {
@@ -17,6 +18,8 @@ type View struct {
 }
 
 func NewView(layout string, files ...string) *View {
+	InitFiles(files)
+	EndFiles(files)
 	files = append(files, layoutFiles()...)
 	t, error := template.ParseFiles(files...)
 
@@ -51,4 +54,18 @@ func layoutFiles() []string {
 	}
 
 	return files
+}
+
+func InitFiles(files []string) {
+	for i, f := range files {
+		files[i] = InitTemplate + f
+	}
+
+}
+
+func EndFiles(files []string) {
+	for i, f := range files {
+		files[i] = f + LayoutExt
+	}
+
 }
