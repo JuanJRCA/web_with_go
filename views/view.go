@@ -32,8 +32,16 @@ func NewView(layout string, files ...string) *View {
 }
 
 func (v *View) Render(w http.ResponseWriter, data interface{}) error {
+	w.Header().Set("Content-type", "text/html")
 	return v.Template.ExecuteTemplate(w, v.Layout, data)
 
+}
+
+func (v *View) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	err := v.Render(w, nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func layoutFiles() []string {

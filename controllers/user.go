@@ -1,10 +1,9 @@
-package user
+package controllers
 
 import (
 	"fmt"
 	"net/http"
 
-	"github.com/gorilla/schema"
 	"github.com/web_go/views"
 )
 
@@ -32,14 +31,9 @@ type SignUpForm struct {
 }
 
 func (u *User) Create(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		panic(err)
-	}
-	var form SignUpForm
-	dec := schema.NewDecoder()
-	err = dec.Decode(&form, r.PostForm)
 
+	var form SignUpForm
+	err := Parse(r, &form)
 	if err != nil {
 		panic(err)
 	}
